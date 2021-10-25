@@ -1,6 +1,6 @@
 <template>
   <swiper>
-    <swiper-item v-for="item in banners" :key="item">
+    <swiper-item v-for="item in banners" :key="item.link">
       <a :href="item.link">
         <img :src="item.image">
       </a>
@@ -23,6 +23,9 @@ export default {
         return []
       }
     }
+  },
+  mounted() {
+    console.log(this.banners);
   }
 }
 </script>
