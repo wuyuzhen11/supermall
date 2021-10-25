@@ -3,6 +3,12 @@
     <nav-bar class="home-nav">
       <div slot="center">购物车</div>
     </nav-bar>
+    <tab-control class="tab-control"
+                 :titles="['流行','新款','精选']"
+                 @tabClick="tabClick"
+                 ref="tabControl2"
+                 v-show="isTabFixed"
+    />
     <scroll class="homeBsContent"
             ref="scroll"
             :probe-type="3"
@@ -10,12 +16,13 @@
             :pull-up-load="true"
             @pullingUp="loadMore"
     >
-      <home-swiper :banners="banners"/>
+      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"/>
       <recommend-view :recommends="recommends"/>
       <feature-view :goods="goods.pop.list"/>
       <tab-control class="tab-control"
                    :titles="['流行','新款','精选']"
                    @tabClick="tabClick"
+                   ref="tabControl"
       />
       <goods-list :goods="goods[currentType].list"/>
     </scroll>
@@ -58,7 +65,9 @@
           'sell':{page:0,list:[]},
         },
         currentType:'pop',
-        isShowBackTop:false
+        isShowBackTop:false,
+        tabOffsetTop:0,
+        isTabFixed:false
       }
     },
     created() {
@@ -76,7 +85,7 @@
       /*this.$bus.$on('itemImageLoad',()=>{
         this.$refs.scroll && this.$refs.scroll.refresh()
       })*/
-
+      this.tabOffsetTop=this.$refs.tabControl
     },
     methods:{
       /**
@@ -94,17 +103,23 @@
             this.currentType='sell'
             break
         }
+        this.$refs.tabControl.currentIndex = index
+        this.$refs.tabControl2.currentIndex = index
       },
       backClick(){
         this.$refs.scroll.scrollTo(0,0)
       },
       contentScroll(position){
         this.isShowBackTop=(-position.y>1000)?true:false
+        //固定
+        this.isTabFixed = -position.y>this.tabOffsetTop?true:false
       },
       loadMore(){
         this.getHomeGoods(this.currentType)
       },
-
+      swiperImageLoad(){
+        this.tabOffsetTop=this.$refs.tabControl.$el.offsetTop
+      },
       /**
        * 网络请求
        * @param type
@@ -125,6 +140,8 @@
           refresh()
         })
       }
+      //获取tabControl的offsetTop
+
     }
   }
 </script>
