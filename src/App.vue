@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 <!--    保持活动，不被销毁-->
-    <keep-alive>
+    <keep-alive exclude="Detail">
       <router-view/>
     </keep-alive>
 
