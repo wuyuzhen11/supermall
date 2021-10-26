@@ -59,11 +59,13 @@
         this.scroll && this.scroll.scrollTo() && this.scroll.scrollTo(x,y,time)
       },
       finishPullUp(){
-        this.scroll && this.scroll.finishPullUp() && this.scroll.finishPullUp();
+        this.scroll && this.scroll.finishPullUp()
       },
       refresh(){
-        console.log("----------");
-        this.scroll && this.scroll.refresh() && this.scroll.refresh()
+        this.scroll && this.scroll.refresh()
+      },
+      getScrollY(){
+        return this.scroll && this.scroll.y?this.scroll.y:0
       }
     }
   }
