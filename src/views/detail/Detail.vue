@@ -7,7 +7,7 @@
       <detail-shop-info :shop="shop"/>
       <detail-goods-info :detail-info="detailInfo"/>
     </scroll>
-    <detail-bottom-bar/>
+    <detail-bottom-bar @addCart="addToCart"/>
   </div>
 </template>
 
@@ -50,7 +50,6 @@ export default {
     getDetails(this.iid).then(res=>{
       const data = res.result
       this.topImages=data.itemInfo.topImages
-      console.log(this.topImages);
       //获取商品信息
       this.goods=new Goods(data.itemInfo,data.columns,data.shopInfo.services,)
       //创建店铺信息的对象
@@ -62,6 +61,17 @@ export default {
   methods:{
     titleClick(index){
       console.log(index);
+    },
+    addToCart(){
+      // 2.将商品信息添加到Store中
+      const obj = {}
+      obj.iid = this.iid
+      obj.imgURL = this.topImages[0]
+      obj.title = this.goods.title
+      obj.desc = this.goods.desc
+      obj.price = this.goods.realPrice
+
+      this.$store.commit('addCart',obj)
     }
   }
 }
